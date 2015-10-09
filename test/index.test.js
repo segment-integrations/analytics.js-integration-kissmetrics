@@ -258,7 +258,7 @@ describe('KISSmetrics', function() {
       beforeEach(function() {
         analytics.stub(window._kmq, 'push');
         analytics.stub(window.KM, 'set');
-        analytics.stub(window.KM, 'ts', Function('return 0'));
+        analytics.stub(window.KM, 'ts', function() { return 0; });
       });
 
       it('should track viewed product', function() {
@@ -311,9 +311,22 @@ describe('KISSmetrics', function() {
           }]
         });
 
-        analytics.assert(window._kmq.push.args[0], ['record', 'completed order', {
-          'completed order - sku': '12074d48',
-          'completed order - total': 166
+        analytics.assert.deepEqual(window._kmq.push.args[0][0], ['record', 'completed order', {
+          'completed order - orderId': '12074d48',
+          'completed order - tax': 16,
+          'completed order - total': 166,
+          // TODO: Remove this?
+          'completed order - products': [{
+            sku: '40bcda73',
+            name: 'my-product',
+            price: 75,
+            quantity: 1
+          }, {
+            sku: '64346fc6',
+            name: 'other-product',
+            price: 75,
+            quantity: 1
+          }]
         }]);
       });
 
@@ -342,24 +355,24 @@ describe('KISSmetrics', function() {
         analytics.assert(typeof fn === 'function');
         fn();
 
-        analytics.assert(window.KM.set.args[0][0], {
-          'completed order - sku': '40bcda73',
-          'completed order - name': 'my-product',
+        analytics.assert.deepEqual(window.KM.set.args[0][0], {
           'completed order - category': 'my-category',
+          'completed order - name': 'my-product',
           'completed order - price': 75,
           'completed order - quantity': 1,
-          _t: 0,
-          _d: 1
+          'completed order - sku': '40bcda73',
+          _d: 1,
+          _t: 0
         });
 
-        analytics.assert(window.KM.set.args[1][0], {
-          'completed order - sku': '64346fc6',
-          'completed order - name': 'other-product',
+        analytics.assert.deepEqual(window.KM.set.args[1][0], {
           'completed order - category': 'my-other-category',
+          'completed order - name': 'other-product',
           'completed order - price': 75,
           'completed order - quantity': 1,
-          _t: 1,
-          _d: 1
+          'completed order - sku': '64346fc6',
+          _d: 1,
+          _t: 1
         });
       });
     });
