@@ -8,9 +8,7 @@ var KISSmetrics = require('../lib/');
 describe('KISSmetrics', function() {
   var analytics;
   var kissmetrics;
-  var options = {
-    apiKey: '67f57ae9d61a6981fa07d141bec8c6c37e8b88c7'
-  };
+  var options;
 
   before(function() {
     // setup global that tell kissmetrics to not fire jsonp breaking requests
@@ -19,6 +17,10 @@ describe('KISSmetrics', function() {
   });
 
   beforeEach(function() {
+    options = {
+      apiKey: '67f57ae9d61a6981fa07d141bec8c6c37e8b88c7'
+    };
+
     analytics = new Analytics();
     kissmetrics = new KISSmetrics(options);
     analytics.use(KISSmetrics);
@@ -254,43 +256,10 @@ describe('KISSmetrics', function() {
       });
     });
 
-    describe('ecommerce', function() {
+    describe('#completedOrder', function() {
       beforeEach(function() {
         analytics.stub(window._kmq, 'push');
         analytics.stub(window.KM, 'set');
-        analytics.stub(window.KM, 'ts', function() { return 0; });
-      });
-
-      it('should track viewed product', function() {
-        analytics.track('viewed product', {
-          sku: 1,
-          name: 'item',
-          category: 'category',
-          price: 9
-        });
-        analytics.called(window._kmq.push, ['record', 'viewed product', {
-          'viewed product - sku': 1,
-          'viewed product - name': 'item',
-          'viewed product - category': 'category',
-          'viewed product - price': 9
-        }]);
-      });
-
-      it('should track added product', function() {
-        analytics.track('added product', {
-          sku: 1,
-          name: 'item',
-          category: 'category',
-          price: 9,
-          quantity: 2
-        });
-        analytics.called(window._kmq.push, ['record', 'added product', {
-          'added product - sku': 1,
-          'added product - name': 'item',
-          'added product - category': 'category',
-          'added product - price': 9,
-          'added product - quantity': 2
-        }]);
       });
 
       it('should track completed order', function() {
@@ -327,6 +296,86 @@ describe('KISSmetrics', function() {
             price: 75,
             quantity: 1
           }]
+        }]);
+      });
+
+
+      it('should not prefix properties when `options.prefixProperties` is set to `false`', function() {
+        kissmetrics.options.prefixProperties = false;
+
+        analytics.track('completed order', {
+          orderId: '12074d48',
+          tax: 16,
+          total: 166,
+          products: [{
+            sku: '40bcda73',
+            name: 'my-product',
+            price: 75,
+            quantity: 1
+          }, {
+            sku: '64346fc6',
+            name: 'other-product',
+            price: 75,
+            quantity: 1
+          }]
+        });
+
+        analytics.assert.deepEqual(window._kmq.push.args[0][0], ['record', 'completed order', {
+          'orderId': '12074d48',
+          'tax': 16,
+          'total': 166,
+          // TODO: Remove this?
+          'products': [{
+            sku: '40bcda73',
+            name: 'my-product',
+            price: 75,
+            quantity: 1
+          }, {
+            sku: '64346fc6',
+            name: 'other-product',
+            price: 75,
+            quantity: 1
+          }]
+        }]);
+      });
+    });
+
+    describe('ecommerce', function() {
+      beforeEach(function() {
+        analytics.stub(window._kmq, 'push');
+        analytics.stub(window.KM, 'set');
+        analytics.stub(window.KM, 'ts', function() { return 0; });
+      });
+
+      it('should track viewed product', function() {
+        analytics.track('viewed product', {
+          sku: 1,
+          name: 'item',
+          category: 'category',
+          price: 9
+        });
+        analytics.called(window._kmq.push, ['record', 'viewed product', {
+          'viewed product - sku': 1,
+          'viewed product - name': 'item',
+          'viewed product - category': 'category',
+          'viewed product - price': 9
+        }]);
+      });
+
+      it('should track added product', function() {
+        analytics.track('added product', {
+          sku: 1,
+          name: 'item',
+          category: 'category',
+          price: 9,
+          quantity: 2
+        });
+        analytics.called(window._kmq.push, ['record', 'added product', {
+          'added product - sku': 1,
+          'added product - name': 'item',
+          'added product - category': 'category',
+          'added product - price': 9,
+          'added product - quantity': 2
         }]);
       });
 
