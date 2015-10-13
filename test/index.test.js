@@ -258,7 +258,6 @@ describe('KISSmetrics', function() {
       beforeEach(function() {
         analytics.stub(window._kmq, 'push');
         analytics.stub(window.KM, 'set');
-        analytics.stub(window.KM, 'ts', function() { return 0; });
       });
 
       it('should track viewed product', function() {
@@ -309,6 +308,8 @@ describe('KISSmetrics', function() {
             price: 75,
             quantity: 1
           }]
+        }, {
+          timestamp: new Date(0)
         });
 
         analytics.assert.deepEqual(window._kmq.push.args[0][0], ['record', 'completed order', {
@@ -347,6 +348,8 @@ describe('KISSmetrics', function() {
             price: 75,
             quantity: 1
           }]
+        }, {
+          timestamp: new Date(0)
         });
 
         // TODO: what is happening here?
