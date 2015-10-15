@@ -111,12 +111,12 @@ describe('KISSmetrics', function() {
           url: window.location.href
         });
         analytics.called(window._kmq.push, ['record', 'Viewed Name Page', {
-          'Viewed Name Page - title': document.title,
-          'Viewed Name Page - url': window.location.href,
-          'Viewed Name Page - path': window.location.pathname,
-          'Viewed Name Page - referrer': document.referrer,
-          'Viewed Name Page - search': window.location.search,
-          'Viewed Name Page - name': 'Name'
+          'Page - title': document.title,
+          'Page - url': window.location.href,
+          'Page - path': window.location.pathname,
+          'Page - referrer': document.referrer,
+          'Page - search': window.location.search,
+          'Page - name': 'Name'
         }]);
       });
 
@@ -125,13 +125,13 @@ describe('KISSmetrics', function() {
         analytics.page('Category', 'Name');
         analytics.calledOnce(window._kmq.push);
         analytics.called(window._kmq.push, ['record', 'Viewed Category Page', {
-          'Viewed Category Page - path': window.location.pathname,
-          'Viewed Category Page - referrer': document.referrer,
-          'Viewed Category Page - title': document.title,
-          'Viewed Category Page - search': window.location.search,
-          'Viewed Category Page - name': 'Name',
-          'Viewed Category Page - category': 'Category',
-          'Viewed Category Page - url': window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + window.location.pathname + window.location.search
+          'Page - path': window.location.pathname,
+          'Page - referrer': document.referrer,
+          'Page - title': document.title,
+          'Page - search': window.location.search,
+          'Page - name': 'Name',
+          'Page - category': 'Category',
+          'Page - url': window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + window.location.pathname + window.location.search
         }]);
       });
 
@@ -139,54 +139,44 @@ describe('KISSmetrics', function() {
         kissmetrics.options.trackCategorizedPages = false;
         analytics.page('Category', 'Name');
         analytics.calledOnce(window._kmq.push);
-        analytics.called(window._kmq.push, ['record', 'Viewed Category Name Page', {
-          'Viewed Category Name Page - title': document.title,
-          'Viewed Category Name Page - url': window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + window.location.pathname + window.location.search,
-          'Viewed Category Name Page - path': window.location.pathname,
-          'Viewed Category Name Page - referrer': document.referrer,
-          'Viewed Category Name Page - search': window.location.search,
-          'Viewed Category Name Page - name': 'Name',
-          'Viewed Category Name Page - category': 'Category'
+        analytics.called(window._kmq.push, ['record', 'Viewed Name Page', {
+          'Page - title': document.title,
+          'Page - url': window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + window.location.pathname + window.location.search,
+          'Page - path': window.location.pathname,
+          'Page - referrer': document.referrer,
+          'Page - search': window.location.search,
+          'Page - name': 'Name',
+          'Page - category': 'Category'
         }]);
       });
 
-      it('should track both named and categorized page when options are on', function() {
+      it('should track only named page when both options are on', function() {
         analytics.page('Category', 'Name');
-        analytics.calledTwice(window._kmq.push);
-        // TODO: maybe calledFirst(method, args)?
-        analytics.called(window._kmq.push, ['record', 'Viewed Category Name Page', {
-          'Viewed Category Name Page - title': document.title,
-          'Viewed Category Name Page - url': window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + window.location.pathname + window.location.search,
-          'Viewed Category Name Page - path': window.location.pathname,
-          'Viewed Category Name Page - referrer': document.referrer,
-          'Viewed Category Name Page - search': window.location.search,
-          'Viewed Category Name Page - name': 'Name',
-          'Viewed Category Name Page - category': 'Category'
-        }]);
-        analytics.called(window._kmq.push, ['record', 'Viewed Category Page', {
-          'Viewed Category Page - title': document.title,
-          'Viewed Category Page - url': window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + window.location.pathname + window.location.search,
-          'Viewed Category Page - path': window.location.pathname,
-          'Viewed Category Page - referrer': document.referrer,
-          'Viewed Category Page - search': window.location.search,
-          'Viewed Category Page - name': 'Name',
-          'Viewed Category Page - category': 'Category'
+        analytics.calledOnce(window._kmq.push);
+        analytics.called(window._kmq.push, ['record', 'Viewed Name Page', {
+          'Page - title': document.title,
+          'Page - url': window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + window.location.pathname + window.location.search,
+          'Page - path': window.location.pathname,
+          'Page - referrer': document.referrer,
+          'Page - search': window.location.search,
+          'Page - name': 'Name',
+          'Page - category': 'Category'
         }]);
       });
 
-      it('should not prefixProperties if option is off', function() {
+      it('should prefixProperties even if option is off', function() {
         kissmetrics.options.prefixProperties = false;
         analytics.page('Name', {
           title: document.title,
           url: window.location.href
         });
         analytics.called(window._kmq.push, ['record', 'Viewed Name Page', {
-          title: document.title,
-          url: window.location.href,
-          name: 'Name',
-          path: window.location.pathname,
-          referrer: document.referrer,
-          search: window.location.search
+          'Page - title': document.title,
+          'Page - url': window.location.href,
+          'Page - name': 'Name',
+          'Page - path': window.location.pathname,
+          'Page - referrer': document.referrer,
+          'Page - search': window.location.search
         }]);
       });
     });
