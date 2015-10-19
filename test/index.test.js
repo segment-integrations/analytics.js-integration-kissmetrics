@@ -8,9 +8,7 @@ var KISSmetrics = require('../lib/');
 describe('KISSmetrics', function() {
   var analytics;
   var kissmetrics;
-  var options = {
-    apiKey: '67f57ae9d61a6981fa07d141bec8c6c37e8b88c7'
-  };
+  var options;
 
   before(function() {
     // setup global that tell kissmetrics to not fire jsonp breaking requests
@@ -19,6 +17,10 @@ describe('KISSmetrics', function() {
   });
 
   beforeEach(function() {
+    options = {
+      apiKey: '67f57ae9d61a6981fa07d141bec8c6c37e8b88c7'
+    };
+
     analytics = new Analytics();
     kissmetrics = new KISSmetrics(options);
     analytics.use(KISSmetrics);
@@ -292,6 +294,44 @@ describe('KISSmetrics', function() {
         }]);
       });
 
+      it('should not prefix properties when `options.prefixProperties` is set to `false`', function() {
+        kissmetrics.options.prefixProperties = false;
+        analytics.track('completed order', {
+          orderId: '12074d48',
+          tax: 16,
+          total: 166,
+          products: [{
+            sku: '40bcda73',
+            name: 'my-product',
+            price: 75,
+            quantity: 1
+          }, {
+            sku: '64346fc6',
+            name: 'other-product',
+            price: 75,
+            quantity: 1
+          }]
+        });
+
+        analytics.assert.deepEqual(window._kmq.push.args[0][0], ['record', 'completed order', {
+          orderId: '12074d48',
+          tax: 16,
+          total: 166,
+          // TODO: Remove this?
+          products: [{
+            sku: '40bcda73',
+            name: 'my-product',
+            price: 75,
+            quantity: 1
+          }, {
+            sku: '64346fc6',
+            name: 'other-product',
+            price: 75,
+            quantity: 1
+          }]
+        }]);
+      });
+
       it('should track completed order', function() {
         analytics.track('completed order', {
           orderId: '12074d48',
@@ -316,7 +356,6 @@ describe('KISSmetrics', function() {
           'completed order - orderId': '12074d48',
           'completed order - tax': 16,
           'completed order - total': 166,
-          // TODO: Remove this?
           'completed order - products': [{
             sku: '40bcda73',
             name: 'my-product',
