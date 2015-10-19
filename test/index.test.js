@@ -232,10 +232,11 @@ describe('KISSmetrics', function() {
         }]);
       });
 
-      it('should alias revenue to "Billing Amount"', function() {
+      it('should alias revenue to "Billing Amount" and "revenue"', function() {
         analytics.track('event', { revenue: 9.99 });
         analytics.called(window._kmq.push, ['record', 'event', {
-          'Billing Amount': 9.99
+          'Billing Amount': 9.99,
+          'event - revenue': 9.99
         }]);
       });
     });
