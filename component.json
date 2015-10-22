@@ -9,7 +9,8 @@
     "component/each": "0.0.1",
     "segmentio/analytics.js-integration": "^1.0.0",
     "ianstormtaylor/is": "0.1.0",
-    "segmentio/global-queue": "0.0.2"
+    "segmentio/global-queue": "0.0.2",
+    "ndhoule/extend": "^1.0.1"
   },
   "development": {
     "segmentio/analytics.js-core": "^2.10.0",

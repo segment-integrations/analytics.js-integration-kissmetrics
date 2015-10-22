@@ -213,6 +213,18 @@ describe('KISSmetrics', function() {
         analytics.called(window._kmq.push, ['identify', 'id']);
         analytics.called(window._kmq.push, ['set', { trait: true, id: 'id' }]);
       });
+
+      it('should send stringify nested traits objects', function() {
+        analytics.identify('id', { trait: { foo: 'bar' }});
+        analytics.called(window._kmq.push, ['identify', 'id']);
+        analytics.called(window._kmq.push, ['set', { 'trait.foo': 'bar', id: 'id'}]);
+      });
+
+      it('should send stringify arrays in nested traits objects', function(){
+        analytics.identify('id', { trait: { foo: [1, 2, 3] }});
+        analytics.called(window._kmq.push, ['identify', 'id']);
+        analytics.called(window._kmq.push, ['set', { 'trait.foo': '1,2,3', id: 'id'}]);
+      });
     });
 
     describe('#track', function() {
@@ -237,6 +249,32 @@ describe('KISSmetrics', function() {
         analytics.called(window._kmq.push, ['record', 'event', {
           'Billing Amount': 9.99,
           'event - revenue': 9.99
+        }]);
+      });
+
+      it('should stringify nested objects', function() {
+        analytics.track('event', {
+          glenn: {
+            coco: 'best halloween costume',
+            mean: {
+              girls: 'lindsey'
+            }
+          }
+        });
+        analytics.called(window._kmq.push, ['record', 'event', {
+          'event - glenn.coco': 'best halloween costume',
+          'event - glenn.mean.girls': 'lindsey'
+        }]);
+      });
+
+      it('should stringify arrays inside nested objects', function(){
+        analytics.track('event', {
+          glenn: {
+            coco: ['1', '2', '3']
+          }
+        });
+        analytics.called(window._kmq.push, ['record', 'event', {
+          'event - glenn.coco': '1,2,3'
         }]);
       });
     });
