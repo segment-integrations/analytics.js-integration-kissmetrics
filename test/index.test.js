@@ -247,6 +247,30 @@ describe('KISSmetrics', function() {
       });
     });
 
+    describe('#group', function() {
+      beforeEach(function() {
+        analytics.stub(window._kmq, 'push');
+      });
+
+      it('should send a group information', function() {
+        analytics.group('new', {
+          name: 'Initech',
+          industry: 'Technology',
+          employees: 329,
+          plan: 'enterprise',
+          'total billed': 830
+        });
+        analytics.called(window._kmq.push, ['set', {
+          'Group - name': 'Initech',
+          'Group - industry': 'Technology',
+          'Group - employees': 329,
+          'Group - plan': 'enterprise',
+          'Group - total billed': 830,
+          'Group - id': 'new'
+        }]);
+      });
+    });
+
     describe('ecommerce', function() {
       beforeEach(function() {
         analytics.stub(window._kmq, 'push');
