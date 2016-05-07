@@ -2,7 +2,7 @@
   "name": "analytics.js-integration-kissmetrics",
   "repo": "segment-integrations/analytics.js-integration-kissmetrics",
   "description": "The Kissmetrics analytics.js integration.",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
