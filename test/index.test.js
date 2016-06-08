@@ -87,22 +87,21 @@ describe('KISSmetrics', function() {
         window.KM_SKIP_PAGE_VIEW = 1;
       });
 
-      it('should record normal kissmetrics page views when the option is set', function() {
-        window.KM_SKIP_PAGE_VIEW = false;
-        analytics.page();
-        analytics.didNotCall(window._kmq.push);
-      });
-
       it('should call `KM.pageView()` when KM_SKIP_PAGE_VIEW is not set', function() {
         window.KM_SKIP_PAGE_VIEW = false;
         analytics.page();
-        analytics.calledOnce(window.KM.pageView);
+        analytics.called(window._kmq.push, ['record', 'Page View', {
+          'Viewed URL': window.location.href,
+          Referrer: document.referrer || 'Direct'
+        }]);
       });
 
       it('should not call `KM.pageView()` when KM_SKIP_PAGE_VIEW is set', function() {
+        kissmetrics.options.trackNamedPages = false;
+        kissmetrics.options.trackCategoryPages = false;
         window.KM_SKIP_PAGE_VIEW = 1;
         analytics.page();
-        analytics.didNotCall(window.KM.pageView);
+        analytics.didNotCall(window._kmq.push);
       });
 
       it('should track named pages by default', function() {
