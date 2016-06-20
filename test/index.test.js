@@ -37,7 +37,6 @@ describe('KISSmetrics', function() {
 
   it('should have the right settings', function() {
     analytics.compare(KISSmetrics, integration('KISSmetrics')
-      .assumesPageview()
       .global('KM')
       .global('_kmil')
       .global('_kmq')
@@ -51,7 +50,6 @@ describe('KISSmetrics', function() {
     beforeEach(function() {
       analytics.stub(kissmetrics, 'load');
       analytics.initialize();
-      analytics.page();
     });
 
     describe('#initialize', function() {
@@ -71,7 +69,6 @@ describe('KISSmetrics', function() {
     beforeEach(function(done) {
       analytics.once('ready', done);
       analytics.initialize();
-      analytics.page();
     });
 
     it('should create window.KM', function() {
