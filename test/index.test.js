@@ -87,16 +87,34 @@ describe('KISSmetrics', function() {
         window.KM_SKIP_PAGE_VIEW = 1;
       });
 
-      it('should call `KM.pageView()` when KM_SKIP_PAGE_VIEW is not set', function() {
-        window.KM_SKIP_PAGE_VIEW = false;
-        analytics.page();
-        analytics.called(window._kmq.push, ['record', 'Page View', {
-          'Viewed URL': window.location.href,
-          Referrer: document.referrer || 'Direct'
-        }]);
+      describe('when KM_SKIP_PAGE_VIEW is false', function() {
+        beforeEach(function() {
+          window.KM_SKIP_PAGE_VIEW = false;
+        });
+
+        it('should send a Page View event with the window URL and referrer', function() {
+          analytics.page();
+          analytics.called(window._kmq.push, ['record', 'Page View', {
+            'Viewed URL': window.location.href,
+            Referrer: document.referrer || 'Direct'
+          }]);
+        });
+
+        describe('when a custom page is provided', function() {
+          it('should send a Page View event with the page URL and referrer', function() {
+            analytics.page('Name', {
+              url: 'http://foo.com/',
+              referrer: 'http://bar.com/'
+            });
+            analytics.called(window._kmq.push, ['record', 'Page View', {
+              'Viewed URL': 'http://foo.com/',
+              Referrer: 'http://bar.com/'
+            }]);
+          });
+        });
       });
 
-      it('should not call `KM.pageView()` when KM_SKIP_PAGE_VIEW is set', function() {
+      it('should not send a Page View event on a call to page() when KM_SKIP_PAGE_VIEW is set', function() {
         kissmetrics.options.trackNamedPages = false;
         kissmetrics.options.trackCategoryPages = false;
         window.KM_SKIP_PAGE_VIEW = 1;
