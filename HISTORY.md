@@ -1,3 +1,13 @@
+
+2.1.0 / 2016-07-12
+==================
+
+  * Update Karma to 1.1.0
+  * Add an additional test case
+  * Use the provided page URL and referrer
+  * Eagerly load without assuming pageview
+  * Preserve _kmq if already defined
+
 2.0.0 / 2016-06-21
 ==================
 
