@@ -230,6 +230,12 @@ describe('KISSmetrics', function() {
         analytics.called(window._kmq.push, ['identify', 'id']);
         analytics.called(window._kmq.push, ['set', { 'trait.foo': '1,2,3', id: 'id' }]);
       });
+
+      it('should skip null or undefined traits', function() {
+        analytics.identify('id', { email: undefined, foo: null }); 
+        analytics.called(window._kmq.push, ['identify', 'id']);
+        analytics.called(window._kmq.push, ['set', { id: 'id' }]);
+      });
     });
 
     describe('#track', function() {
