@@ -1,4 +1,10 @@
 
+2.1.1 / 2016-09-06
+==================
+
+  * Send products and revenue properly
+  * Discard undefined values
+
 2.1.0 / 2016-07-12
 ==================
 
