@@ -397,19 +397,7 @@ describe('KISSmetrics', function() {
         analytics.assert.deepEqual(window._kmq.push.args[0][0], ['record', 'completed order', {
           orderId: '12074d48',
           tax: 16,
-          total: 166,
-          // TODO: Remove this?
-          products: [{
-            sku: '40bcda73',
-            name: 'my-product',
-            price: 75,
-            quantity: 1
-          }, {
-            sku: '64346fc6',
-            name: 'other-product',
-            price: 75,
-            quantity: 1
-          }]
+          total: 166
         }]);
       });
 
@@ -436,18 +424,7 @@ describe('KISSmetrics', function() {
         analytics.assert.deepEqual(window._kmq.push.args[0][0], ['record', 'completed order', {
           'completed order - orderId': '12074d48',
           'completed order - tax': 16,
-          'completed order - total': 166,
-          'completed order - products': [{
-            sku: '40bcda73',
-            name: 'my-product',
-            price: 75,
-            quantity: 1
-          }, {
-            sku: '64346fc6',
-            name: 'other-product',
-            price: 75,
-            quantity: 1
-          }]
+          'completed order - total': 166
         }]);
       });
 
