@@ -282,6 +282,19 @@ describe('KISSmetrics', function() {
           'event - glenn.coco': '1,2,3'
         }]);
       });
+
+      it('should discard null and undefined values inside nested objects', function() {
+        analytics.track('event', {
+          foo: 'bar',
+          xy: null,
+          baz: 'quux',
+          zzy: undefined
+        });
+        analytics.called(window._kmq.push, ['record', 'event', {
+          'event - foo': 'bar',
+          'event - baz': 'quux'
+        }]);
+      });
     });
 
     describe('#alias', function() {
